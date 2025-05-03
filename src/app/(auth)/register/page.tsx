@@ -28,7 +28,7 @@ export default function RegisterPage() {
 
       if (response.ok) {
         toast.success("Registration successful!");
-        router.push("/login");
+        router.push(`/verfiy-email/${email}`);
       } else {
         const error = await response.json();
         toast.error(error.error || "Registration failed");
