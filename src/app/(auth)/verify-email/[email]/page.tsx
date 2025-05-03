@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
@@ -11,6 +11,7 @@ export default function VerifyEmailPage({
   params: Promise<{ email: string }>;
 }) {
   const unwrapped = React.use(params);
+  const router = useRouter();
   const { email } = unwrapped;
   const [code, setCode] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
