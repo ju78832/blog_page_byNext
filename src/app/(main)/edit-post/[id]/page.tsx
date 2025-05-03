@@ -7,12 +7,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { getPostById, updatePost } from "@/lib/actions";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Checkbox } from "@/components/ui/checkbox";
 import { UploadCloud, Trash2 } from "lucide-react";
+import { CldImage } from "next-cloudinary";
 
-export default function EditPostPage({ params }: { params: { id: string } }) {
+export default function EditPostPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const unwrapped = React.use(params);
+  const { id } = unwrapped;
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +34,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     const loadPost = async () => {
-      const post = await getPostById(params.id);
+      const post = await getPostById(id);
       if (post) {
         setTitle(post.title);
         setContent(post.content);
@@ -37,7 +44,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
       }
     };
     loadPost();
-  }, [params.id]);
+  }, [id]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -76,7 +83,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
         imageUrl = uploadData.publicId;
       }
 
-      await updatePost(params.id, {
+      await updatePost(id, {
         title,
         content,
         excerpt,
@@ -85,7 +92,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
       });
 
       toast.success("Post updated successfully!");
-      router.push(`/posts/${params.id}`);
+      router.push(`/posts/${id}`);
     } catch (error) {
       console.error("Error updating post:", error);
       toast.error("Failed to update post");
@@ -137,9 +144,10 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
           {currentImageUrl && !previewUrl && (
             <div className="relative group">
               <div className="relative h-64 w-full rounded-md overflow-hidden border">
-                <img
+                <CldImage
                   src={currentImageUrl}
                   alt="Current post image"
+                  fill
                   className="object-cover w-full h-full"
                 />
               </div>
@@ -187,8 +195,9 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
           {previewUrl && (
             <div className="mt-4">
               <div className="relative h-48 w-full rounded-md overflow-hidden border">
-                <img
+                <CldImage
                   src={previewUrl}
+                  fill
                   alt="New image preview"
                   className="object-cover w-full h-full"
                 />
