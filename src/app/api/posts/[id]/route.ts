@@ -63,9 +63,10 @@ export async function PUT(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
+  const { id } = await params;
 
   if (!session) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -74,7 +75,7 @@ export async function DELETE(
   try {
     // Verify the user is the author or admin
     const existingPost = await prisma.post.findUnique({
-      where: { id: params.id },
+      where: { id: id },
     });
 
     if (!existingPost) {
@@ -88,7 +89,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
-    await prisma.post.delete({ where: { id: params.id } });
+    await prisma.post.delete({ where: { id: id } });
 
     return NextResponse.json({ success: true });
   } catch (error) {

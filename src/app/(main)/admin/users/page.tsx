@@ -1,3 +1,4 @@
+"use client";
 import {
   Table,
   TableBody,
@@ -9,10 +10,25 @@ import {
 import { getUsers } from "@/lib/actions";
 import { checkAdmin } from "@/lib/actions";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { User } from "@/generated/prisma";
 
-export default async function AdminUsersPage() {
-  await checkAdmin();
-  const users = await getUsers();
+export default function AdminUsersPage() {
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const response = await fetch("/api/users", {
+        method: "GET",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setUsers(data.data);
+      }
+    };
+    fetchUsers();
+  }, []);
 
   return (
     <div className="container py-8">

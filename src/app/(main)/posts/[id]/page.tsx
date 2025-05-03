@@ -39,7 +39,7 @@ export default function PostPage({
       <Card className="hover:bg-accent transition-colors">
         <CardHeader>
           <div className="flex justify-between items-start">
-            <CardTitle>{post.title}</CardTitle>
+            <CardTitle className="text-3xl">{post.title}</CardTitle>
             <Link href="/">
               <Button variant="outline">Back</Button>
             </Link>

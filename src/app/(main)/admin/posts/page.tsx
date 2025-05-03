@@ -29,6 +29,15 @@ export default function AdminPostsPage() {
     respones();
   }, []);
 
+  const deletePostHandler = async (id: string) => {
+    const response = await fetch(`/api/posts/${id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
+    }
+  };
+
   return (
     <div className="container py-8">
       <div className="flex justify-between items-center mb-8">
@@ -58,9 +67,14 @@ export default function AdminPostsPage() {
                     Edit
                   </Button>
                 </Link>
-                <form action={deletePost}>
+                <form>
                   <input type="hidden" name="id" value={post.id} />
-                  <Button variant="destructive" size="sm" type="submit">
+                  <Button
+                    onClick={() => deletePostHandler(post.id)}
+                    variant="destructive"
+                    size="sm"
+                    type="submit"
+                  >
                     Delete
                   </Button>
                 </form>

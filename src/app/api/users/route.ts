@@ -1,6 +1,8 @@
 import { PrismaClient } from "@/generated/prisma";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 const prisma = new PrismaClient();
 export async function POST(req: Request) {
@@ -33,6 +35,24 @@ export async function POST(req: Request) {
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to create user" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET() {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || session.user.role !== "ADMIN") {
+      return NextResponse.json({ message: "Not Authorized" }, { status: 400 });
+    }
+    const user = await prisma.user.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+    return NextResponse.json({ data: user });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Something went wrong" },
       { status: 500 }
     );
   }
