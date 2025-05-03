@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -14,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { useEffect, useState } from "react";
 import { Post } from "@/generated/prisma";
+
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [featuredPosts, setFeaturedPosts] = useState<Post[]>([]);

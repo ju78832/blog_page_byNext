@@ -12,7 +12,7 @@ import bcrypt from "bcrypt";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
-  adapter: PrismaAdapter(prisma),
+
   session: { strategy: "jwt" },
   pages: { signIn: "/login" },
   providers: [
@@ -45,10 +45,6 @@ export const authOptions: NextAuthOptions = {
             }
           : null;
       },
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
@@ -84,6 +80,7 @@ export const authOptions: NextAuthOptions = {
               role: "USER",
             },
           });
+          return true;
         }
       }
       return true;

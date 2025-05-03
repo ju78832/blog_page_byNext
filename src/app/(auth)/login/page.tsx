@@ -66,13 +66,6 @@ export default function LoginPage() {
         <div className="flex flex-col space-y-4 mt-4">
           <Button
             variant="outline"
-            onClick={() => signIn("google")}
-            disabled={isLoading}
-          >
-            Continue with Google
-          </Button>
-          <Button
-            variant="outline"
             onClick={() => signIn("github")}
             disabled={isLoading}
           >
