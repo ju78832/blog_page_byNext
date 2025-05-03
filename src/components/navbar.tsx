@@ -19,7 +19,7 @@ export default function Navbar() {
     <header className="border-b">
       <div className="container flex items-center justify-between h-16">
         <Link href="/" className="font-bold text-lg ml-10">
-          Blog Platform
+          Blogspot
         </Link>
 
         <nav className="flex items-center gap-4">
